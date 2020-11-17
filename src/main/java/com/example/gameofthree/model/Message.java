@@ -11,7 +11,7 @@ public class Message extends Observable implements Serializable {
 
     private int calculatedMessage = -1;
 
-    private boolean error = false;
+    private boolean error;
 
     private boolean isGameEnded = false;
 
@@ -22,7 +22,7 @@ public class Message extends Observable implements Serializable {
     }
 
     public Message(final boolean hasError){
-        this.error = true;
+        this.error = hasError;
     }
 
     public void calculate(final int selectedNumber){
@@ -64,7 +64,6 @@ public class Message extends Observable implements Serializable {
     public String toString() {
         return "Message{" +
             "currentMessage=" + currentMessage +
-            ", calculatedMessage=" + calculatedMessage +
             ", error=" + error +
             ", isGameEnded=" + isGameEnded +
             '}';

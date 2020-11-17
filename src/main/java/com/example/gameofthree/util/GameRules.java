@@ -44,15 +44,11 @@ public class GameRules {
         return replyModeOptionsAsSet.contains(number);
     }
 
-    public static void setGameEndLimit(int gameEndLimit) {
-        GameRules.gameEndLimit = gameEndLimit;
-    }
-
     public static boolean isAutoReplyOn() {
         int selectedNumber;
         Scanner scanner = new Scanner(System.in);
         do {
-            System.out.println("Please select reply mode. 1 for auto-reply 2 for manual-reply mode");
+            System.out.println("Please select reply mode. 1:auto-reply 2:manual-reply");
             while (!scanner.hasNextInt()) {
                 System.out.println("That's not a number!");
                 scanner.next();
