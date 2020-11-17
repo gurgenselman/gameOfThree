@@ -1,4 +1,4 @@
-package com.example.gameofthree.service;
+package com.example.gameofthree.connection;
 
 import com.example.gameofthree.model.Message;
 import java.io.ObjectInputStream;
@@ -6,7 +6,7 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.Arrays;
 
-public class MessageInitiatorService {
+public class MessageSender {
 
     private ObjectOutputStream outToServer;
     private ObjectInputStream inFromServer;
@@ -15,7 +15,7 @@ public class MessageInitiatorService {
     private int port;
     private boolean isConnected = false;
 
-    public MessageInitiatorService(String host, int port) {
+    public MessageSender(String host, int port) {
         this.host = host;
         this.port = port;
     }

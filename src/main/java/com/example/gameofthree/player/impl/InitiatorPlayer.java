@@ -2,16 +2,16 @@ package com.example.gameofthree.player.impl;
 
 import com.example.gameofthree.model.Message;
 import com.example.gameofthree.player.Player;
-import com.example.gameofthree.service.MessageInitiatorService;
+import com.example.gameofthree.connection.MessageSender;
 import java.util.Observable;
 
 public class InitiatorPlayer extends Player implements Runnable {
 
-    private MessageInitiatorService messageInitiatorService;
+    private MessageSender messageSender;
 
     public InitiatorPlayer(int initialNumber, String host, int port, boolean autoReplyOn){
         super(initialNumber, autoReplyOn);
-        messageInitiatorService = new MessageInitiatorService(host, port);
+        messageSender = new MessageSender(host, port);
     }
 
     public void update(Observable o, Object arg) {
@@ -27,7 +27,7 @@ public class InitiatorPlayer extends Player implements Runnable {
         while (true){
             checkConnectionAlive();
 
-            messageFromServer = messageInitiatorService.getMessageFromServer();
+            messageFromServer = messageSender.getMessageFromServer();
 
             if (messageFromServer.isGameEnded())
                 break;
@@ -35,31 +35,30 @@ public class InitiatorPlayer extends Player implements Runnable {
             System.out.println(String.format("\nNew message received: %s", messageFromServer));
             setCurrentMessage(messageFromServer);
 
-            System.out.println("Player1 chose number: " + getCurrentNumber() + " result = " + getCurrentMessage()
-                .getCalculatedNumber());
+            System.out.println(String.format("Player1 chose number: %s and result = %s will be sending back. " , getCurrentNumber(), getCurrentMessage().getCalculatedNumber()));
 
-            messageInitiatorService
+            messageSender
                 .sendMessage(new Message(getCurrentMessage().getCalculatedNumber(), getCurrentMessage().isGameEnded()));
 
             if(getCurrentMessage().isGameEnded())
                 break;
         };
 
-        messageInitiatorService.closeConnections();
+        messageSender.closeConnections();
         System.out.println("\nGame is Ended");
     }
 
     private void checkConnectionAlive() {
-        if (!messageInitiatorService.isConnected())
-            messageInitiatorService.getReadyConnections();
+        if (!messageSender.isConnected())
+            messageSender.getReadyConnections();
     }
 
     private void getReady() {
-        messageInitiatorService.getReadyConnections();
-        System.out.println( "Player1: init message ->" + getCurrentNumber());
+        messageSender.getReadyConnections();
+        System.out.println( "Player1: init message -> " + getCurrentNumber());
     }
 
     private void sendInitialMessage(final Message message) {
-        messageInitiatorService.sendMessage(message);
+        messageSender.sendMessage(message);
     }
 }

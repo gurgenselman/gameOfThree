@@ -1,4 +1,4 @@
-package com.example.gameofthree.service;
+package com.example.gameofthree.connection;
 
 import com.example.gameofthree.model.Message;
 import java.io.IOException;
@@ -7,12 +7,12 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.Arrays;
 
-public class MessageReceiverService {
+public class MessageReceiver {
     private Socket clientSocket;
     private ObjectOutputStream outToClient;
     private ObjectInputStream inFromClient;
 
-    public MessageReceiverService(Socket socket){
+    public MessageReceiver(Socket socket){
 
         try{
             this.clientSocket = socket;

@@ -1,7 +1,5 @@
 package com.example.gameofthree;
 
-import static com.example.gameofthree.util.GameRules.isAutoReplyOn;
-
 import com.example.gameofthree.player.impl.ReceiverPlayer;
 import java.io.IOException;
 import java.net.ServerSocket;

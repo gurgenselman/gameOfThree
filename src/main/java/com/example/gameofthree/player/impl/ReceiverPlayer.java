@@ -2,18 +2,18 @@ package com.example.gameofthree.player.impl;
 
 import com.example.gameofthree.model.Message;
 import com.example.gameofthree.player.Player;
-import com.example.gameofthree.service.MessageReceiverService;
+import com.example.gameofthree.connection.MessageReceiver;
 import java.net.Socket;
 import java.util.Observable;
 import java.util.Observer;
 
 public class ReceiverPlayer extends Player implements Observer, Runnable {
 
-    private MessageReceiverService messageReceiverService;
+    private MessageReceiver messageReceiver;
 
     public ReceiverPlayer(Socket socket, boolean autoReplyOn){
         super(0, autoReplyOn);
-        messageReceiverService = new MessageReceiverService(socket);
+        messageReceiver = new MessageReceiver(socket);
     }
 
     public void update(Observable o, Object arg) {
@@ -22,7 +22,7 @@ public class ReceiverPlayer extends Player implements Observer, Runnable {
 
     public void run() {
         while(true){
-            Message messageFromClient = messageReceiverService.getMessageFromClient();
+            Message messageFromClient = messageReceiver.getMessageFromClient();
 
             if (messageFromClient.isGameEnded())
                 break;
@@ -30,16 +30,16 @@ public class ReceiverPlayer extends Player implements Observer, Runnable {
             System.out.println(String.format("\nNew message received: %s", messageFromClient));
             setCurrentMessage(messageFromClient);
 
-            System.out.println("Player2 chose number: " + getCurrentNumber()  + " result = " + getCurrentMessage().getCalculatedNumber());
+            System.out.println(String.format("Player2 chose number: %s and result = %s will be sending back. " , getCurrentNumber(), getCurrentMessage().getCalculatedNumber()));
 
             final Message outGoingMessage = new Message(getCurrentMessage().getCalculatedNumber(), getCurrentMessage().isGameEnded());
 
-            messageReceiverService.sendMessageBackToClient(outGoingMessage);
+            messageReceiver.sendMessageBackToClient(outGoingMessage);
 
             if(getCurrentMessage().isGameEnded())
                 break;
         }
-        messageReceiverService.finalizeConnections();
+        messageReceiver.finalizeConnections();
         System.out.println("\nGame is Ended");
     }
 }
